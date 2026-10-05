@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090909">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20transform%3D%22rotate%2818%2016%2016%29%22%3E%3Cpath%20d%3D%22M15.2%204.2L17.8%204.2L17.3%2012.8L22.8%2012.1L23.1%2014.7L17.1%2015.4L16.4%2027.8L13.8%2027.8L14.5%2015.7L8.7%2016.4L8.4%2013.8L14.7%2013.1Z%22%20fill%3D%22%23111%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<title>Operation @Discord</title>
+<style>
+:root{--bg:#080808;--panel:#111;--panel2:#151515;--line:#242424;--text:#f2f2f2;--muted:#8d8d8d;--blue:#4b8dff;--blue2:#2f6ff0;--green:#20d66b;--yellow:#ffc72c;--red:#ff4d5b;--purple:#a879ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}a{color:inherit}.container{width:min(1120px,calc(100% - 40px));margin:auto}
+header{min-height:74vh;display:flex;align-items:center;border-bottom:1px solid #151515;background:radial-gradient(circle at 50% 35%,rgba(62,116,255,.10),transparent 38%),linear-gradient(180deg,#0a0a0a 0%,#080808 100%)}.hero{padding:90px 0 80px}.badge{display:inline-flex;align-items:center;gap:9px;padding:8px 13px;border:1px solid #252525;border-radius:999px;color:#aaa;background:#101010;font-size:13px;font-weight:600}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 14px rgba(32,214,107,.65)}h1{font-size:clamp(44px,8vw,92px);letter-spacing:-.055em;line-height:.95;margin:25px 0 20px;font-weight:800}h1 span{color:#777}.hero p{max-width:690px;color:#999;font-size:18px;margin:0 0 30px}.actions{display:flex;gap:12px;flex-wrap:wrap}
+button,.btn{border:1px solid #2a2a2a;background:#121212;color:#eee;border-radius:10px;padding:13px 18px;font-size:15px;font-weight:650;cursor:pointer;text-decoration:none;transition:.2s}button:hover,.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}.btn.primary,button.primary{background:var(--blue2);border-color:var(--blue2)}
+section{padding:78px 0}.section-head{margin-bottom:28px}.eyebrow{color:#777;font-size:12px;text-transform:uppercase;letter-spacing:.15em;font-weight:800}h2{font-size:36px;letter-spacing:-.035em;margin:8px 0}.sub{color:#888;margin:0;max-width:720px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}.stat{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:24px}.stat .number{font-size:32px;font-weight:750;letter-spacing:-.03em}.stat .label{color:#858585;margin-top:4px}
+.platform{border:1px solid var(--line);background:linear-gradient(145deg,#151515,#0e0e0e);border-radius:16px;padding:26px;display:flex;align-items:center;gap:18px}.discord-icon{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;background:#5865f2;color:#fff;font-size:30px;font-weight:900}.platform h3{margin:0;font-size:20px}.platform p{margin:4px 0 0;color:#888}
+.panel{border:1px solid var(--line);background:#0f0f0f;border-radius:15px;overflow:hidden}.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}.tab{background:#111;border:1px solid #292929;color:#888;border-radius:999px;padding:10px 16px;font-weight:650}.tab.active{background:#5865f2;border-color:#5865f2;color:#fff}
+.toolbar{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:12px;padding:18px;border-bottom:1px solid var(--line)}select,input{width:100%;height:42px;border-radius:8px;border:1px solid #292929;background:#111;color:#ddd;padding:0 12px;outline:none}select:focus,input:focus{border-color:#5865f2}
+.status{display:inline-flex;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:750}.pending{background:rgba(255,199,44,.13);color:var(--yellow)}.under-review{background:rgba(75,141,255,.13);color:#72a9ff}.action-required{background:rgba(168,121,255,.13);color:var(--purple)}.approved,.reviewed{background:rgba(32,214,107,.12);color:var(--green)}.completed{background:rgba(32,214,107,.18);color:#55ef92}.rejected{background:rgba(255,77,91,.12);color:var(--red)}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.archive-card{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:25px}.archive-top{display:flex;align-items:center;gap:15px;margin-bottom:15px}.archive-icon{width:48px;height:48px;border-radius:13px;background:#5865f2;display:grid;place-items:center;font-weight:900;font-size:22px}.archive-card h3{margin:0;font-size:17px}.archive-card .big{font-size:25px;margin-top:14px}.archive-card .small{color:#777;font-size:13px}.archive-card .range{color:#555;font-size:12px;margin-top:12px}
+.report-box{border:1px solid #252525;background:#101010;border-radius:16px;padding:28px;display:flex;justify-content:space-between;align-items:center;gap:24px}.report-box h3{margin:0 0 6px;font-size:22px}.report-box p{margin:0;color:#888}.live{display:inline-flex;align-items:center;gap:9px;color:#27d66d;font-weight:750;text-transform:uppercase;letter-spacing:.12em;font-size:13px}.live .dot{width:9px;height:9px}
+footer{border-top:1px solid #151515;padding:35px 0;color:#666;font-size:13px}footer strong{color:#999}.secret-link{cursor:pointer;color:#999;text-decoration:none}.secret-link:hover{color:#fff}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.show{display:flex}.modal-box{width:min(560px,100%);background:#111;border:1px solid #292929;border-radius:16px;padding:25px;box-shadow:0 25px 80px rgba(0,0,0,.5)}.modal-head{display:flex;justify-content:space-between;align-items:center}.modal h3{margin:0;font-size:23px}.close{border:0;background:#1a1a1a;width:38px;height:38px;padding:0}.form{display:grid;gap:13px;margin-top:20px}.form textarea,.report-form textarea,.reply-textarea{width:100%;min-height:120px;resize:vertical;border:1px solid #292929;border-radius:8px;background:#0d0d0d;color:#ddd;padding:12px;font:inherit;outline:none}.notice{font-size:12px;color:#666;margin-top:5px}.toast{position:fixed;right:20px;bottom:20px;background:#151515;border:1px solid #303030;padding:13px 16px;border-radius:10px;display:none;z-index:80;color:#ddd;max-width:380px}.toast.show{display:block}
+.report-builder{padding:0}.report-mode{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:17px;border-bottom:1px solid var(--line);background:#101010}.mode-label{color:#777;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-right:5px}.mode{padding:9px 13px;border-radius:8px}.mode.active{background:#5865f2;border-color:#5865f2;color:#fff}.report-form{padding:22px;display:grid;gap:18px}.service-fields{display:grid;gap:16px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:grid;gap:7px;color:#aaa;font-size:13px;font-weight:650}.report-form textarea{min-height:125px}.safe-notice{border:1px solid rgba(255,199,44,.22);background:rgba(255,199,44,.06);color:#c6a94e;border-radius:9px;padding:12px 14px;font-size:13px}.safe-notice strong{color:#f0c94d}.upload-box{border:1px dashed #303030;border-radius:11px;padding:17px;display:grid;gap:13px}.upload-box p{margin:3px 0 0;color:#666;font-size:12px}.upload-btn{display:inline-flex;width:max-content;background:#181818;border:1px solid #303030;border-radius:8px;padding:10px 13px;color:#ddd;cursor:pointer}.preview-grid{display:flex;flex-wrap:wrap;gap:10px}.preview{position:relative;width:110px;height:85px;border:1px solid #292929;border-radius:8px;overflow:hidden;background:#0b0b0b}.preview img{width:100%;height:100%;object-fit:cover}.preview button{position:absolute;right:4px;top:4px;width:24px;height:24px;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.75);color:#fff}.submit-row{display:flex;justify-content:space-between;align-items:center;gap:20px}.submit-row .notice{max-width:690px;line-height:1.5}
+.admin-hidden{display:none}.admin-section{padding-top:40px}.admin-actions{display:flex;gap:8px;flex-wrap:wrap}.small-btn{padding:8px 11px;border-radius:8px;font-size:12px}.danger{background:#351216;border-color:#5a1d24;color:#ff7b85}.success{background:#102d1d;border-color:#1e633a;color:#59e891}.report-detail{white-space:normal;max-width:700px;line-height:1.45;color:#bbb}.admin-card{border:1px solid var(--line);background:#0f0f0f;border-radius:15px;padding:18px;margin-bottom:12px}.admin-card-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.admin-meta{color:#777;font-size:12px}.empty{padding:35px;text-align:center;color:#666}.reply-box{margin-top:15px;border-top:1px solid #222;padding-top:15px}.reply-textarea{min-height:90px}.admin-edit-grid{display:grid;grid-template-columns:220px 1fr;gap:12px;align-items:start;margin-top:14px}.track-panel{border:1px solid var(--line);background:#0f0f0f;border-radius:15px;padding:20px}.track-form{display:grid;grid-template-columns:1fr auto;gap:10px}.track-result{margin-top:15px}.track-card{border:1px solid #282828;background:#111;border-radius:12px;padding:18px}.track-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.track-id{font-size:12px;color:#666;margin-top:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.track-reply{margin-top:17px;border:1px solid #292929;background:#0c0c0c;border-radius:10px;padding:15px}.track-reply .label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#777;font-weight:800;margin-bottom:7px}.track-reply .text{color:#ddd;white-space:pre-wrap}.copy-btn{padding:8px 11px;font-size:12px}.security-line{border:1px solid #222;background:#0d0d0d;border-radius:9px;padding:10px 12px;color:#777;font-size:12px;margin-top:12px}
+@media(max-width:760px){.container{width:min(100% - 28px,1120px)}header{min-height:auto}.hero{padding:70px 0}.hero p{font-size:16px}section{padding:55px 0}.stats{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr 1fr}.report-box{align-items:flex-start;flex-direction:column}.admin-card-top{flex-direction:column}.admin-edit-grid{grid-template-columns:1fr}.track-form{grid-template-columns:1fr}}
+@media(max-width:480px){h1{font-size:48px}.toolbar{grid-template-columns:1fr}.field-grid{grid-template-columns:1fr}.submit-row{flex-direction:column;align-items:stretch}.submit-row button{width:100%}.track-head{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container hero">
+    <div class="badge"><span class="dot"></span> LIVE FEED &nbsp; · &nbsp; Operation @Discord</div>
+    <h1>Operation <span>@Discord</span></h1>
+    <p>A focused online-content reporting and archive dashboard for Discord submissions. Browse reports, review their status, and track an individual submission using its private report ID.</p>
+    <div class="actions">
+      <a class="btn primary" href="#reports">Browse Reports →</a>
+      <button onclick="openReport()">Submit Report →</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="container">
+    <div class="section-head"><div class="eyebrow">Overview</div><h2>Discord reporting</h2><p class="sub">Only one reporting destination is available on this portal: Discord.</p></div>
+    <div class="stats">
+      <div class="stat"><div class="number" id="totalStat">—</div><div class="label">submitted report records</div></div>
+      <div class="stat"><div class="number" id="reviewedStat">—</div><div class="label">reports reviewed</div></div>
+      <div class="stat"><div class="number" id="pendingStat">—</div><div class="label">reports pending</div></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:10px"><div class="container"><div class="platform"><div class="discord-icon">◌</div><div><h3>DISCORD</h3><p>Online-content reports and archived Discord submissions</p></div></div></div></section>
+
+<section id="reports">
+<div class="container">
+<div class="section-head"><div class="live"><span class="dot"></span> Live feed <span style="color:#666;font-weight:500;letter-spacing:0;text-transform:none">Firebase connected · private records</span></div><h2>Online Content Reports</h2><p class="sub">Choose a Discord or Gmail service, then submit the relevant information through the website or your email client.</p></div>
+
+<div class="tabs service-tabs">
+<button class="tab active" data-service="discord-server">Discord Server</button>
+<button class="tab" data-service="discord-user">Discord User</button>
+<button class="tab" data-service="gmail-recovery">Gmail Recovery</button>
+</div>
+
+<div class="panel report-builder">
+<div class="report-mode"><span class="mode-label">Submission method</span><button class="mode active" data-mode="website">1 · Via Website</button><button class="mode" data-mode="email">2 · Via Email</button></div>
+<form id="reportForm" class="report-form">
+<input type="hidden" id="selectedService" value="discord-server"><input type="hidden" id="selectedMode" value="website">
+
+<div id="serverFields" class="service-fields">
+<div class="field-grid">
+<label>Server invite code<input id="serverInvite" placeholder="e.g. discord.gg/example"></label>
+<label>Reporter name / ID<input id="serverReporter" placeholder="Optional"></label>
+</div>
+<label>Description — why are you reporting?<textarea id="serverDescription" placeholder="Explain what should be reviewed..."></textarea></label>
+</div>
+
+<div id="userFields" class="service-fields" style="display:none">
+<div class="field-grid">
+<label>Discord User ID<input id="userId" placeholder="e.g. 123456789012345678"></label>
+<label>Username<input id="userName" placeholder="@username"></label>
+</div>
+<label>Description — why are you reporting?<textarea id="userDescription" placeholder="Explain what should be reviewed..."></textarea></label>
+</div>
+
+<div id="gmailFields" class="service-fields" style="display:none">
+<div class="safe-notice"><strong>Gmail recovery safety:</strong> Never enter a password, verification code, OTP, backup code, or security answer into a report form.</div>
+<div class="field-grid">
+<label>Gmail address<input id="gmailAddress" type="email" placeholder="name@gmail.com"></label>
+<label>Device name<input id="deviceName" placeholder="e.g. Samsung Galaxy / Windows PC"></label>
+</div>
+<div class="field-grid">
+<label>Recovery phone (optional)<input id="recoveryPhone" placeholder="Only if relevant to the recovery issue"></label>
+<label>Recovery email (optional)<input id="recoveryEmail" type="email" placeholder="backup@example.com"></label>
+</div>
+<label>What happened?<textarea id="gmailDescription" placeholder="Describe the account recovery problem. Do not include passwords or OTP codes."></textarea></label>
+</div>
+
+<div class="upload-box"><div><strong>Attachments</strong><p>Add screenshots, photos, or other evidence. Images are previewed locally. They are not uploaded to Firebase Storage in this free version.</p></div><label class="upload-btn">+ Add images / photos<input id="evidenceFiles" type="file" accept="image/*" multiple hidden></label><div id="previewGrid" class="preview-grid"></div></div>
+<div class="submit-row"><div class="notice">Website mode saves report data in Firestore and generates a private Report ID. Email mode opens Gmail addressed to <strong>noreply@errorr.work.gd</strong>.</div><button id="submitReportBtn" class="primary" type="submit">Submit Report →</button></div>
+</form>
+</div>
+</div>
+</section>
+
+<section>
+<div class="container"><div class="section-head"><div class="eyebrow">Archive</div><h2>Discord Archive</h2><p class="sub">Public report details are private. Use your Report ID to check an individual submission.</p></div>
+<div class="cards">
+<div class="archive-card"><div class="archive-top"><div class="archive-icon">◌</div><div><h3>DISCORD</h3><div class="small">Online content</div></div></div><div class="big" id="archiveTotal">Private</div><div class="small" id="archiveBreakdown">Use the administrator console for aggregate statistics.</div><div class="range">Live Firebase archive</div></div>
+<div class="archive-card"><div class="archive-top"><div class="archive-icon">↗</div><div><h3>REPORTING PORTAL</h3><div class="small">Discord + recovery requests</div></div></div><div class="big">1 active channel</div><div class="small">Submit and track reports from one place.</div><div class="range">Live system</div></div>
+</div></div>
+</section>
+
+<section id="status">
+<div class="container">
+<div class="section-head"><div class="eyebrow">Status</div><h2>Check Your Report</h2><p class="sub">Enter the Report ID you received after submitting a website report. Only the matching report can be retrieved.</p></div>
+<div class="track-panel">
+<form id="trackForm" class="track-form">
+<input id="trackIdInput" autocomplete="off" placeholder="e.g. OD-7K4M2X9P">
+<button class="primary" type="submit">Check Report →</button>
+</form>
+<div class="security-line">Your Report ID is a private tracking reference. Do not share it publicly if you want to keep your report status private.</div>
+<div id="trackResult" class="track-result"><div class="empty">Enter your Report ID above to view its current status and any administrator response.</div></div>
+</div>
+</div>
+</section>
+
+<section><div class="container"><div class="report-box"><div><h3>Submit a Discord report</h3><p>Send a report for review through this portal.</p></div><button class="primary" onclick="openReport()">Submit Report →</button></div></div></section>
+
+<section id="adminSection" class="admin-hidden admin-section">
+<div class="container">
+<div class="section-head"><div class="eyebrow">Private dashboard</div><h2>Administrator Console</h2><p class="sub">Manage reports stored in Firestore. Set an official status and send a response to the reporter.</p></div>
+<div class="panel">
+<div class="toolbar" style="grid-template-columns:1fr 1fr 1fr"><select id="adminFilter"><option value="all">All reports</option><option value="Pending">Pending</option><option value="Under Review">Under Review</option><option value="Action Required">Action Required</option><option value="Approved">Approved</option><option value="Completed">Completed</option><option value="Rejected">Rejected</option></select><button class="primary" onclick="loadAdminReports()">Refresh reports</button><button onclick="adminLogout()">Lock admin panel</button></div>
+<div id="adminReports" style="padding:18px"></div>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="container"><strong>Operation @Discord</strong> · Discord-only reporting dashboard.
+<span style="float:right">Independent interface · Not affiliated with Discord or Google.</span><br>
+<span style="display:block;margin-top:10px">© 2026 Operation @Discord · All rights reserved · <span class="secret-link" onclick="openAdminLogin()">Records</span></span>
+</div>
+</footer>
+
+<div class="modal" id="modal"><div class="modal-box"><div class="modal-head"><h3>Report form</h3><button class="close" onclick="closeReport()">×</button></div><p style="color:#888">Use the full reporting form above to choose a service, submission method, and attachments.</p><a class="btn primary" href="#reports" onclick="closeReport()">Open Report Form</a></div></div>
+
+<div class="modal" id="successModal"><div class="modal-box"><div class="modal-head"><h3>Report Submitted</h3><button class="close" onclick="closeSuccessModal()">×</button></div><p style="color:#888">Your report has been submitted. Save this Report ID so you can check its status later.</p><div class="track-card" style="margin-top:18px"><div class="track-id" style="margin:0 0 6px">REPORT ID</div><div id="successReportId" style="font-size:25px;font-weight:800;letter-spacing:.06em"></div><div class="actions" style="margin-top:16px"><button id="copyReportIdBtn" class="copy-btn">Copy Report ID</button><button class="primary" onclick="closeSuccessModal();document.getElementById('status').scrollIntoView({behavior:'smooth'})">Check Status →</button></div></div></div></div>
+
+<div class="modal" id="adminModal"><div class="modal-box"><div class="modal-head"><h3>Administrator Access</h3><button class="close" onclick="closeAdminLogin()">×</button></div><p style="color:#888">Private console login.</p><form id="adminLoginForm" class="form"><label>Email<input id="adminEmail" type="email" autocomplete="username" placeholder="Administrator email"></label><label>Password<input id="adminPassword" type="password" autocomplete="current-password" placeholder="Password"></label><button class="primary" type="submit">Login →</button><div class="notice">Administrator access uses Firebase Authentication. The password is not stored in this HTML.</div></form></div></div>
+
+<div class="toast" id="toast">Ready.</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, getDoc, query, orderBy, setDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCtY37iTEFGcocjy8bwrPuJefHaiK4CiM4",
+  authDomain: "operator-discord-600fd.firebaseapp.com",
+  projectId: "operator-discord-600fd",
+  storageBucket: "operator-discord-600fd.firebasestorage.app",
+  messagingSenderId: "736123366676",
+  appId: "1:736123366676:web:782cbfb855298ed0452601",
+  measurementId: "G-XXQFT1RKSY"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+const ADMIN_EMAIL = "noreply@errorr.work.gd";
+
+const serviceTabs=document.querySelectorAll(".service-tabs .tab");
+const modeButtons=document.querySelectorAll(".mode");
+const selectedService=document.getElementById("selectedService");
+const selectedMode=document.getElementById("selectedMode");
+const submitBtn=document.getElementById("submitReportBtn");
+
+function switchService(service){
+ selectedService.value=service;
+ serviceTabs.forEach(b=>b.classList.toggle("active",b.dataset.service===service));
+ document.querySelectorAll(".service-fields").forEach(x=>x.style.display="none");
+ document.getElementById({"discord-server":"serverFields","discord-user":"userFields","gmail-recovery":"gmailFields"}[service]).style.display="block";
+}
+serviceTabs.forEach(b=>b.addEventListener("click",()=>switchService(b.dataset.service)));
+
+function switchMode(mode){
+ selectedMode.value=mode;
+ modeButtons.forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
+ submitBtn.textContent=mode==="email"?"Send →":"Submit Report →";
+}
+modeButtons.forEach(b=>b.addEventListener("click",()=>switchMode(b.dataset.mode)));
+
+const fileInput=document.getElementById("evidenceFiles"), previewGrid=document.getElementById("previewGrid");
+let selectedFiles=[];
+fileInput.addEventListener("change",()=>{selectedFiles=Array.from(fileInput.files||[]);renderPreviews()});
+function renderPreviews(){
+ previewGrid.innerHTML="";
+ selectedFiles.forEach((file,index)=>{
+  const reader=new FileReader();
+  reader.onload=e=>{
+   const item=document.createElement("div");item.className="preview";
+   const img=document.createElement("img");img.src=e.target.result;img.alt="Evidence "+(index+1);
+   const btn=document.createElement("button");btn.type="button";btn.textContent="×";
+   btn.onclick=()=>{selectedFiles.splice(index,1);renderPreviews()};
+   item.append(img,btn);previewGrid.appendChild(item);
+  };reader.readAsDataURL(file);
+ });
+}
+function value(id){return(document.getElementById(id)?.value||"").trim()}
+
+function generateReportId(){
+ const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+ const bytes=new Uint8Array(12);
+ crypto.getRandomValues(bytes);
+ let out="OD-";
+ for(const b of bytes) out+=chars[b%chars.length];
+ return out;
+}
+
+function getReportData(){
+ const service=selectedService.value;
+ const data={service,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),status:"Pending",statusTag:"Pending",adminReply:"",attachments:selectedFiles.map(f=>f.name)};
+ if(service==="discord-server"){data.serverInvite=value("serverInvite");data.reporter=value("serverReporter");data.description=value("serverDescription")}
+ else if(service==="discord-user"){data.userId=value("userId");data.userName=value("userName");data.reporter=data.userName;data.description=value("userDescription")}
+ else {data.gmailAddress=value("gmailAddress");data.deviceName=value("deviceName");data.recoveryPhone=value("recoveryPhone");data.recoveryEmail=value("recoveryEmail");data.reporter=data.gmailAddress;data.description=value("gmailDescription")}
+ return data;
+}
+function validateReport(data){
+ if(data.service==="discord-server"&&(!data.serverInvite||!data.description))return"Please provide the server invite code and reporting reason.";
+ if(data.service==="discord-user"&&(!data.userId||!data.userName||!data.description))return"Please provide the Discord User ID, username, and reporting reason.";
+ if(data.service==="gmail-recovery"&&(!data.gmailAddress||!data.description))return"Please provide the Gmail address and recovery issue.";
+ return"";
+}
+async function saveToFirebase(data){
+ const publicId=generateReportId();
+ const clean={...data,publicId,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+ await setDoc(doc(db,"reports",publicId),clean);
+ return publicId;
+}
+function buildEmail(data){
+ const serviceName={"discord-server":"Discord Server Report","discord-user":"Discord User Report","gmail-recovery":"Gmail Recovery Request"}[data.service];
+ const lines=["Operation @Discord","Service: "+serviceName,"",data.serverInvite?"Server invite: "+data.serverInvite:"",data.userId?"Discord User ID: "+data.userId:"",data.userName?"Discord username: "+data.userName:"",data.gmailAddress?"Gmail address: "+data.gmailAddress:"",data.deviceName?"Device: "+data.deviceName:"",data.recoveryPhone?"Recovery phone: "+data.recoveryPhone:"",data.recoveryEmail?"Recovery email: "+data.recoveryEmail:"","","Description:",data.description,"","Attachments selected on website: "+(data.attachments.length?data.attachments.join(", "):"None"),"","Security note: passwords, OTPs, verification codes, and backup codes must never be included."];
+ return{subject:"Operation @Discord — "+serviceName,body:lines.filter(Boolean).join("\n")};
+}
+
+document.getElementById("reportForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const data=getReportData(),error=validateReport(data);
+ if(error){showToast(error);return}
+ if(selectedMode.value==="email"){
+  const mail=buildEmail(data);
+  window.location.href="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent("noreply@errorr.work.gd")+"&su="+encodeURIComponent(mail.subject)+"&body="+encodeURIComponent(mail.body);
+  return;
+ }
+ submitBtn.disabled=true;submitBtn.textContent="Saving…";
+ try{
+  const id=await saveToFirebase(data);
+  e.target.reset();selectedFiles=[];fileInput.value="";renderPreviews();switchService("discord-server");switchMode("website");
+  showSuccessModal(id);
+ }catch(err){console.error(err);showToast("Could not save report. Check Firebase rules/connection.")}
+ finally{submitBtn.disabled=false;submitBtn.textContent="Submit Report →"}
+});
+
+function openReport(){document.getElementById("modal").classList.add("show")}
+function closeReport(){document.getElementById("modal").classList.remove("show")}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeReport()});
+window.openReport=openReport;window.closeReport=closeReport;
+
+function showSuccessModal(id){document.getElementById("successReportId").textContent=id;document.getElementById("successModal").classList.add("show")}
+function closeSuccessModal(){document.getElementById("successModal").classList.remove("show")}
+document.getElementById("successModal").addEventListener("click",e=>{if(e.target.id==="successModal")closeSuccessModal()});
+document.getElementById("copyReportIdBtn").addEventListener("click",async()=>{const id=document.getElementById("successReportId").textContent;try{await navigator.clipboard.writeText(id);showToast("Report ID copied.")}catch{showToast("Copy failed. Please save the Report ID manually.")}});
+window.closeSuccessModal=closeSuccessModal;
+
+function openAdminLogin(){
+ if(auth.currentUser?.email?.toLowerCase()===ADMIN_EMAIL.toLowerCase()){showAdmin();return}
+ document.getElementById("adminModal").classList.add("show");document.getElementById("adminEmail").focus()
+}
+function closeAdminLogin(){document.getElementById("adminModal").classList.remove("show")}
+document.getElementById("adminModal").addEventListener("click",e=>{if(e.target.id==="adminModal")closeAdminLogin()});
+window.openAdminLogin=openAdminLogin;window.closeAdminLogin=closeAdminLogin;
+
+document.getElementById("adminLoginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const email=value("adminEmail"),password=value("adminPassword");
+ if(!email||!password){showToast("Enter the administrator email and password.");return}
+ try{await signInWithEmailAndPassword(auth,email,password)}
+ catch(err){
+  console.error(err);
+  const code=err?.code||"";
+  if(code==="auth/invalid-credential"||code==="auth/wrong-password"||code==="auth/user-not-found")showToast("Invalid administrator credentials.");
+  else if(code==="auth/operation-not-allowed")showToast("Email/password sign-in is not enabled in Firebase Authentication.");
+  else showToast("Administrator login failed.");
+ }
+});
+
+function adminLogout(){signOut(auth).catch(console.error)}
+window.adminLogout=adminLogout;
+
+onAuthStateChanged(auth,user=>{
+ const isAdmin=!!user&&user.email?.toLowerCase()===ADMIN_EMAIL.toLowerCase();
+ if(isAdmin){closeAdminLogin();showAdmin(false);loadAdminReports();refreshStats(true);showToast("Administrator console unlocked.")}
+ else{document.getElementById("adminSection").classList.add("admin-hidden");document.getElementById("adminReports").innerHTML="";resetPublicStats()}
+});
+
+function showAdmin(scroll=true){document.getElementById("adminSection").classList.remove("admin-hidden");if(scroll)document.getElementById("adminSection").scrollIntoView({behavior:"smooth"})}
+function formatDate(iso){if(!iso)return"—";const d=new Date(iso);return isNaN(d)?"—":d.toLocaleString()}
+function normalizeStatus(s){return s==="Reviewed"?"Under Review":s||"Pending"}
+function statusClass(s){return normalizeStatus(s).toLowerCase().replace(/\s+/g,"-")}
+function serviceName(s){return({"discord-server":"Discord Server","discord-user":"Discord User","gmail-recovery":"Gmail Recovery"})[s]||s}
+
+async function getReports(){
+ if(auth.currentUser?.email?.toLowerCase()!==ADMIN_EMAIL.toLowerCase())throw new Error("Administrator authentication required.");
+ const snap=await getDocs(query(collection(db,"reports"),orderBy("createdAt","desc")));
+ return snap.docs.map(x=>({_id:x.id,...x.data()}));
+}
+
+async function loadAdminReports(){
+ const box=document.getElementById("adminReports");box.innerHTML='<div class="empty">Loading reports…</div>';
+ try{
+  const reports=await getReports(),filter=document.getElementById("adminFilter").value;
+  const filtered=filter==="all"?reports:reports.filter(r=>normalizeStatus(r.status)===filter);
+  if(!filtered.length){box.innerHTML='<div class="empty">No reports found.</div>';return}
+  box.innerHTML="";
+  filtered.forEach(r=>{
+   const card=document.createElement("div");card.className="admin-card";
+   const details=[r.serverInvite?`Server: ${escapeHtml(r.serverInvite)}`:"",r.userId?`User ID: ${escapeHtml(r.userId)}`:"",r.userName?`Username: ${escapeHtml(r.userName)}`:"",r.gmailAddress?`Gmail: ${escapeHtml(r.gmailAddress)}`:"",r.deviceName?`Device: ${escapeHtml(r.deviceName)}`:"",r.reporter?`Reporter: ${escapeHtml(r.reporter)}`:""].filter(Boolean).join("<br>");
+   const current=normalizeStatus(r.status);
+   card.innerHTML=`<div class="admin-card-top"><div><strong>${escapeHtml(serviceName(r.service))}</strong><div class="admin-meta">${formatDate(r.createdAt)} · Report ID: ${escapeHtml(r.publicId||r._id)}</div></div><span class="status ${statusClass(current)}">${escapeHtml(current)}</span></div><div class="report-detail" style="margin-top:12px">${details||"No extra fields"}<br><br><strong>Description:</strong><br>${escapeHtml(r.description||"No description")}</div><div class="admin-edit-grid"><label>Status / Tag<select class="admin-status-select"><option ${current==="Pending"?"selected":""}>Pending</option><option ${current==="Under Review"?"selected":""}>Under Review</option><option ${current==="Action Required"?"selected":""}>Action Required</option><option ${current==="Approved"?"selected":""}>Approved</option><option ${current==="Completed"?"selected":""}>Completed</option><option ${current==="Rejected"?"selected":""}>Rejected</option></select></label><label>Administrator response<textarea class="reply-textarea" placeholder="Write the response the reporter will see...">${escapeHtml(r.adminReply||"")}</textarea></label></div><div class="admin-actions" style="margin-top:12px"><button class="small-btn success save-update">Save status + reply</button><button class="small-btn danger delete-report">Delete</button></div><div class="admin-meta" style="margin-top:9px">Last updated: ${escapeHtml(formatDate(r.updatedAt||r.createdAt))}</div>`;
+   card.querySelector(".save-update").onclick=()=>saveReportUpdate(r._id,card);
+   card.querySelector(".delete-report").onclick=()=>deleteReport(r._id);
+   box.appendChild(card);
+  });
+ }catch(err){console.error(err);box.innerHTML='<div class="empty">Could not load reports. Make sure the administrator is signed in and Firestore rules match this HTML.</div>'}
+}
+
+async function saveReportUpdate(id,card){
+ const status=card.querySelector(".admin-status-select").value,reply=card.querySelector(".reply-textarea").value.trim();
+ try{
+  await updateDoc(doc(db,"reports",id),{status,statusTag:status,adminReply:reply,updatedAt:new Date().toISOString()});
+  showToast("Report updated successfully.");await loadAdminReports();await refreshStats(true);
+ }catch(err){console.error(err);showToast("Could not update this report.")}
+}
+
+async function deleteReport(id){
+ if(!confirm("Delete this report permanently?"))return;
+ try{await deleteDoc(doc(db,"reports",id));showToast("Report deleted.");await loadAdminReports();await refreshStats(true)}
+ catch(err){console.error(err);showToast("Could not delete this report.")}
+}
+window.loadAdminReports=loadAdminReports;window.deleteReport=deleteReport;
+
+function escapeHtml(str){return String(str??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"})[m])}
+function resetPublicStats(){document.getElementById("totalStat").textContent="—";document.getElementById("reviewedStat").textContent="—";document.getElementById("pendingStat").textContent="—";document.getElementById("archiveTotal").textContent="Private";document.getElementById("archiveBreakdown").textContent="Use the administrator console for aggregate statistics."}
+async function refreshStats(isAdmin=false){
+ if(!isAdmin&&auth.currentUser?.email?.toLowerCase()!==ADMIN_EMAIL.toLowerCase()){resetPublicStats();return}
+ try{
+  const reports=await getReports(),total=reports.length,reviewed=reports.filter(r=>["Under Review","Approved","Completed","Reviewed"].includes(normalizeStatus(r.status))).length,pending=reports.filter(r=>normalizeStatus(r.status)==="Pending").length,rejected=reports.filter(r=>normalizeStatus(r.status)==="Rejected").length;
+  document.getElementById("totalStat").textContent=total.toLocaleString();document.getElementById("reviewedStat").textContent=reviewed.toLocaleString();document.getElementById("pendingStat").textContent=pending.toLocaleString();document.getElementById("archiveTotal").textContent=total.toLocaleString()+" reports";document.getElementById("archiveBreakdown").textContent=`${reviewed} reviewed · ${pending} pending · ${rejected} rejected`;
+ }catch(err){console.warn("Stats unavailable:",err);resetPublicStats()}
+}
+
+document.getElementById("trackForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const input=value("trackIdInput").toUpperCase(),result=document.getElementById("trackResult");
+ if(!input){result.innerHTML='<div class="empty">Enter a Report ID first.</div>';return}
+ result.innerHTML='<div class="empty">Checking report…</div>';
+ try{
+  const snap=await getDoc(doc(db,"reports",input));
+  if(!snap.exists()){result.innerHTML='<div class="empty">No report was found for that Report ID.</div>';return}
+  const r=snap.data();
+  if(r.publicId!==input){result.innerHTML='<div class="empty">No report was found for that Report ID.</div>';return}
+  const status=normalizeStatus(r.status||r.statusTag),reply=r.adminReply?.trim();
+  result.innerHTML=`<div class="track-card"><div class="track-head"><div><strong>${escapeHtml(serviceName(r.service))}</strong><div class="track-id">${escapeHtml(r.publicId)}</div></div><span class="status ${statusClass(status)}">${escapeHtml(status)}</span></div><div style="margin-top:14px;color:#888;font-size:13px">Submitted: ${escapeHtml(formatDate(r.createdAt))}</div><div style="margin-top:4px;color:#888;font-size:13px">Last updated: ${escapeHtml(formatDate(r.updatedAt||r.createdAt))}</div><div class="track-reply"><div class="label">Administrator response</div><div class="text">${reply?escapeHtml(reply):"No administrator response has been posted yet."}</div></div></div>`;
+ }catch(err){console.error(err);result.innerHTML='<div class="empty">Could not check this report right now. Please try again.</div>'}
+});
+
+document.getElementById("adminFilter").addEventListener("change",loadAdminReports);
+switchService("discord-server");switchMode("website");resetPublicStats();
+</script>
+</body>
+</html>
